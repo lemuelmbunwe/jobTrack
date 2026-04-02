@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 class SessionController extends Controller
 {
     public function create(){
-        return view('auth.create');
+        return view('auth.login');
     }
 
     public function store(){
@@ -18,17 +18,25 @@ class SessionController extends Controller
             'email' => ['required' , 'email'],
             'password' => ['required']
         ]);
-        //login user
-        if(Auth::attempt($attributes)){
+
+        // dd(request());
+        //login user -- remember to modify the UI such that these error messages are passed when needed
+        if(!Auth::attempt($attributes)){
             throw ValidationException::withMessages([
                 'email' => 'Credentials do not match'
             ]);
         }
 
         //regenerate token
-        request()->session()->generate();
+        request()->session()->regenerate();
 
         //redirect
-        return view('/application');
+        return redirect('/applications');
+    }
+
+    public function destroy(){
+        Auth::logout();
+
+        return redirect('/');
     }
 }

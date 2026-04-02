@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 
+
 class RegisterUserController extends Controller
 {
     public function register(){
@@ -15,10 +16,12 @@ class RegisterUserController extends Controller
 
     public function store(){
         //validate 
+
+        // dd(request());
         $attributes = request()->validate([
             'name' =>'required',
             'email' => ['required' , 'email'],
-            'password' => ['password', Password::min(6), 'confirmed']
+            'password' => ['required', Password::min(4), 'confirmed']
         ]);
 
         //store

@@ -11,9 +11,27 @@ class ApplicationController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {   
+        $stats = Application::selectRaw("
+            count(*) as total,
+            count(case when status = 'applied' then 1 end) as applied,
+            count(case when status = 'interview' then 1 end) as interviews,
+            count(case when status = 'offer' then 1 end) as offers,
+            count(case when status = 'rejected' then 1 end) as rejections
+            ")->first();
+
+        $total = $stats->total ?: 1;
+
+        $percentages = [
+            'applied' => round(($stats->applied / $total) * 100),
+            'interviews' => round(($stats->interviews / $total) * 100),
+            'offers' => round(($stats->offers / $total) * 100),
+            'rejections' => round(($stats->rejections / $total) * 100)
+        ];
+
+
         $applications = Application::all();
-        return view('applications.index' , ['applications' => $applications]);
+        return view('applications.index' , compact('applications', 'stats' , 'percentages' , 'total') );
     }
 
     /**

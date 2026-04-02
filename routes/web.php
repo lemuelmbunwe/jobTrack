@@ -13,7 +13,7 @@ Route::resource('applications' , ApplicationController::class);
 
 
 //create user
-Route::get('/register' , [RegisterUserController::class , 'index']);
+Route::get('/register' , [RegisterUserController::class , 'register']);
 Route::post('/register' , [RegisterUserController::class , 'store']);
 
 
