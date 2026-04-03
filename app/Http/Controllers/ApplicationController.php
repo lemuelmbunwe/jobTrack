@@ -52,6 +52,7 @@ class ApplicationController extends Controller
             'company'=>'required',
             'role' => 'required',
             'status' => 'required',
+            'applied_at' => 'required',
         ]);
 
         // dd(request();
@@ -85,7 +86,8 @@ class ApplicationController extends Controller
      */
     public function edit(Application $application)
     {
-        //
+        
+        return view('applications.edit' , compact('application'));
     }
 
     /**
@@ -93,7 +95,22 @@ class ApplicationController extends Controller
      */
     public function update(Request $request, Application $application)
     {
-        //
+        //validate
+        $attributes = request()->validate([
+            'company' => 'required',
+            'role' => 'required',
+            'status' => 'required',
+            'applied_at' => 'required'
+        
+        ]);
+
+        // dd($application);
+
+        //persist data
+        $application->update($attributes);
+
+        //redirect
+        return redirect('/applications');
     }
 
     /**
